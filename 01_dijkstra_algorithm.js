@@ -40,10 +40,14 @@ class Graph {
   }
 
   dijkstra(start, end) {
+    // For shortest distance from each node to start node
     const distances = new Map();
+    // To track previous node for each visited node
     const previous = new Map();
+    // Remember priority number is the shortest distance
     const pq = new PriorityQueue();
-
+    // You can also use JavaScript Set for visited nodes
+    
     // Initialize distances
     for (const vertex of this.adjacencyList.keys()) {
       distances.set(vertex, Infinity);
