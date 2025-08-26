@@ -1,4 +1,6 @@
-// Rohit Chauhan: Recursion and Factorial
+// Rohit: Create AI using Maximizer and Minimizer in a Game Tree
+
+// Rohit Chauhan: Recursion First!
 function factorial(n: number): number {
 	if (n < 0) throw new Error("No factorial for negatives!");
 	// Base case. Where the Call stack unwinds.
