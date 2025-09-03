@@ -1,12 +1,6 @@
-# Rohit: src/utils/esbuild.nim
-import osproc, strutils, os
+import os, osproc
 
-proc runEsbuild*(entry: string, outDir: string) =
-  ## Call esbuild binary to bundle React app
-  ## Example:
-  ## esbuild src/main.jsx --bundle --outfile=dist/bundle.js --format=esm
-
-  # Always look in Nimpack root first
+proc runEsbuild*(entry: string, outdir: string; prod = false) =
   let esbuildPath =
     if fileExists(getAppDir() / "bin" / "esbuild"):
       getAppDir() / "bin" / "esbuild"
@@ -15,40 +9,22 @@ proc runEsbuild*(entry: string, outDir: string) =
     else:
       "esbuild"
 
-  let outfile = outDir / "bundle.js"
+  createDir(outdir)
 
-  let args = [
-    entry,
-    "--bundle",
-    "--outfile=" & outfile,
-    "--format=esm",
-    "--loader:.js=jsx",
-    "--loader:.jsx=jsx",
-    "--loader:.ts=tsx",
-    "--loader:.tsx=tsx"
-  ]
+  var cmd = esbuildPath & " " & entry &
+    " --bundle" &
+    " --outfile=" & (outdir / "bundle.js") &
+    " --loader:.js=jsx --loader:.jsx=jsx" &
+    " --loader:.ts=ts --loader:.tsx=tsx" &
+    " --jsx=automatic --format=esm" &
+    " --platform=browser --target=esnext"
 
-  # Run esbuild with full command string
-  let (outp, code) = execCmdEx(esbuildPath & " " & args.join(" "))
+  if prod:
+    cmd &= " --minify"
 
-  if code != 0:
-    echo "❌ Esbuild failed:"
-    echo outp
-    quit(1)
-
-  # Create basic index.html if not exists
-  let htmlPath = outDir / "index.html"
-  if not fileExists(htmlPath):
-    writeFile(htmlPath, """
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Nimpack App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="./bundle.js"></script>
-  </body>
-</html>
-""")
+  let (outp, exitCode) = execCmdEx(cmd)
+  if exitCode != 0:
+    echo "❌ Esbuild failed:\n", outp
+  else:
+    if outp.len > 0: echo outp
+    echo "✔ Esbuild bundled → " & outdir / "bundle.js"

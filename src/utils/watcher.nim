@@ -1,16 +1,15 @@
-import os, times, tables  # ✅ added tables
+import std/[os, times, asyncdispatch, tables]
 
-proc watchDir*(dir: string, onChange: proc(path: string)) =
-  ## Naive file watcher: polls mtime every 1s
-  var lastTimes: Table[string, Time] = initTable[string, Time]()
+proc watchDir*(dir: string, onChange: proc(path: string)) {.async.} =
+  ## Portable polling watcher (works even without std/watchevents)
+  var lastTimes = initTable[string, Time]()
 
   while true:
-    for kind, path in walkDir(dir, relative=false):
-      if kind == pcFile:
+    for path in walkDirRec(dir):   # walk returns only path
+      if fileExists(path):
         let modTime = getLastModificationTime(path)
-        if not lastTimes.hasKey(path):
+        if path notin lastTimes or lastTimes[path] != modTime:
           lastTimes[path] = modTime
-        elif lastTimes[path] != modTime:
-          lastTimes[path] = modTime
+          echo "🔄 File change detected: ", path
           onChange(path)
-    sleep(1000) # check every 1s
+    await sleepAsync(1000)   # poll every 1s

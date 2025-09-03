@@ -9,23 +9,18 @@ proc devServer*() =
   let projectDir = getCurrentDir()
   let entry = projectDir / "src" / "main.jsx"
   let distDir = projectDir / "dist"
+
   createDir(distDir)
+  runEsbuild(entry, distDir)   # initial build
 
-  # Initial build
-  runEsbuild(entry, distDir)
-
-  # Create client store
-  let store = ClientStore(sockets: @[])
-
-  # Start HTTP + WS server
+  var store = ClientStore(sockets: @[])
   asyncCheck startServer(distDir, 3000, store)
 
-  # Watch src/ for changes
-  watchDir(projectDir / "src",
+  # ✅ Watch src/ and trigger rebuild + reload
+  asyncCheck watchDir(projectDir / "src",
     proc(path: string) =
-      echo "🔄 File changed: ", path
       runEsbuild(entry, distDir)
-      asyncCheck notifyReload(store)   # pass store explicitly
+      asyncCheck notifyReload(store)
   )
 
   runForever()

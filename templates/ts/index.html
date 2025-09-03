@@ -2,12 +2,14 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Nimpack React App (TS)</title>
+    <title>Nimpack React App</title>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="./src/main.tsx"></script>
+    <!-- ✅ always point to esbuild bundle -->
+    <script type="module" src="./bundle.js"></script>
     <script>
+      // ✅ only used in dev, harmless in prod
       const ev = new EventSource("/livereload");
       ev.onmessage = (e) => {
         if (e.data.trim() === "reload") location.reload();

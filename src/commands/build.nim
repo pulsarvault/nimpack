@@ -1,23 +1,24 @@
-# Rohit: src/commands/build.nim
-import os, strutils
+import os
 import ../utils/esbuild
 
 proc buildProject*() =
-  ## Run esbuild on current project
-  echo "🔨 Building project with esbuild..."
-
+  ## Build project for production
   let projectDir = getCurrentDir()
   let entry = projectDir / "src" / "main.jsx"
   let distDir = projectDir / "dist"
 
-  if not fileExists(entry):
-    echo "Error: Could not find entry file at ", entry
-    quit(1)
-
   createDir(distDir)
 
-  # Call esbuild wrapper
-  runEsbuild(entry, distDir)
+  echo "⚡ Building production bundle..."
+  runEsbuild(entry, distDir, prod = true)
 
-  echo "✔ Build complete!"
-  echo "Output in: ", distDir
+  # ✅ Copy index.html into dist
+  let srcHtml = projectDir / "index.html"
+  let dstHtml = distDir / "index.html"
+  if fileExists(srcHtml):
+    copyFile(srcHtml, dstHtml)
+    echo "✔ Copied index.html → dist/"
+  else:
+    echo "❌ No index.html found at project root: ", srcHtml
+
+  echo "🎉 Production build ready at: ", distDir
