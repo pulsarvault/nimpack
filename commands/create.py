@@ -29,4 +29,4 @@ def run(name: str, template: str):
 
     print("Next steps:")
     print(f"  cd {name}")
-    print(f"  ../pypack.py dev")
+    print(f"  ../pypack dev")

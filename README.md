@@ -20,13 +20,13 @@ Supports **JavaScript projects** with **esbuild bundling** and **SSE-based hot r
 pip install --user aiohttp watchfiles
 
 # 2. Create a new project
-./pypack.py create my-app --template js
+./pypack create my-app --template js
 
 # 3. Enter the project
 cd my-app
 
 # 4. Start the dev server
-../pypack.py dev
+../pypack dev
 
 # 5. Build for production
-../pypack.py build
+../pypack build
