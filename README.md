@@ -1,6 +1,6 @@
 # 📦 Pypack (Rohit Chauhan)
 
-A lightweight, React project generator, dev server, web bundler written in modern Python.  
+A lightweight React project generator, dev server, and web bundler written in modern Python.  
 Supports **JavaScript projects** with **esbuild bundling** and **SSE-based hot reload**.  
 
 ## 🚀 Features
@@ -8,19 +8,26 @@ Supports **JavaScript projects** with **esbuild bundling** and **SSE-based hot r
 - `dev` → run local dev server with esbuild + hot reload  
 - `build` → bundle app for production  
 
-## 🛠 Prerequisites
+## 🛠 Prerequisites & Usage
+
 - Python 3.10+ (tested on Python 3.13)  
 - Node.js + npm (for React dependencies)  
 - esbuild binary (included in `bin/` folder of repo)  
 
-Install Python dependencies once:
+### Steps:
+
 ```bash
+# 1. Install Python dependencies
 pip install --user aiohttp watchfiles
 
-# 📦 Pypack usage:
-Install Python dependencies once:
-```bash
+# 2. Create a new project
 ./pypack.py create my-app --template js
+
+# 3. Enter the project
 cd my-app
+
+# 4. Start the dev server
 ../pypack.py dev
+
+# 5. Build for production
 ../pypack.py build
