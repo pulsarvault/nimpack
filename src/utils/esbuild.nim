@@ -6,9 +6,14 @@ proc runEsbuild*(entry: string, outDir: string) =
   ## Example:
   ## esbuild src/main.jsx --bundle --outfile=dist/bundle.js --format=esm
 
+  # Always look in Nimpack root first
   let esbuildPath =
-    if fileExists("bin" / "esbuild"): getCurrentDir() / "bin" / "esbuild"
-    else: "esbuild"  # fallback if globally installed
+    if fileExists(getAppDir() / "bin" / "esbuild"):
+      getAppDir() / "bin" / "esbuild"
+    elif fileExists("bin" / "esbuild"):
+      getCurrentDir() / "bin" / "esbuild"
+    else:
+      "esbuild"
 
   let outfile = outDir / "bundle.js"
 

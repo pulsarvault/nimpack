@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Nimpack React App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./src/main.jsx"></script>
+    <script>
+      // Live reload script injected by Nimpack dev server
+      const ev = new EventSource("/livereload");
+      ev.onmessage = (e) => {
+        if (e.data.trim() === "reload") location.reload();
+      };
+    </script>
+  </body>
+</html>

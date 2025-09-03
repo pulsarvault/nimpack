@@ -2,6 +2,7 @@
 import os, strutils
 import commands/create
 import commands/build
+import commands/dev
 
 proc runCommandLine*() =
   let args = commandLineParams()
@@ -11,6 +12,7 @@ proc runCommandLine*() =
     echo "Commands:"
     echo "  create <project-name> [--ts]   Create new React project"
     echo "  build                          Bundle project with esbuild"
+    echo "  dev                            Run dev server with hot reload"
     quit(1)
 
   let command = args[0]
@@ -26,6 +28,9 @@ proc runCommandLine*() =
 
   of "build":
     buildProject()
+
+  of "dev":
+    devServer()
 
   else:
     echo "Unknown command: ", command
