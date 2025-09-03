@@ -1,4 +1,4 @@
-# 📦 Pypack (Rohit Chauhan)
+# 🐍🔥 Pypack (Rohit Chauhan)
 
 A lightweight React project generator, dev server, and web bundler written in modern Python.  
 Supports **JavaScript projects** with **esbuild bundling** and **SSE-based hot reload**.  
