@@ -11,8 +11,7 @@ Supports **JavaScript projects** with **esbuild bundling** and **SSE-based hot r
 ## 🛠 Prerequisites & Usage
 
 - Python 3.10+ (tested on Python 3.13)  
-- Node.js + npm (for React dependencies)  
-- esbuild binary (included in `bin/` folder of repo)  
+- Node.js + npm (for React dependencies) 
 
 ### Steps:
 
