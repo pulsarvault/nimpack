@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pypackx"
-version = "1.0.1"
-description = "React + Tailwind Dev-Server, Hot-live-Reloader and Production-Bundler (Rohit c.)"
+version = "1.0.2"
+description = "React + Tailwind Dev-Server, Hot-live-Reloader and Production-Bundler (Rohit C.)"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.9"
