@@ -10,11 +10,11 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="pypack")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    pc = sub.add_parser("create", help="Create a new React Project")
+    pc = sub.add_parser("create", help="Create a new PyPack React Project")
     pc.add_argument("flavor", choices=["reactjs", "reactts"])
     pc.add_argument("name")
 
-    sub.add_parser("dev", help="Run dev server")
+    sub.add_parser("dev", help="Run PyPack dev server")
     sub.add_parser("build", help="Build production bundle")
 
     args = parser.parse_args(argv or sys.argv[1:])

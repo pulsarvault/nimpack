@@ -55,7 +55,7 @@ async def start(dist: str) -> None:
     await runner.setup()
     site = web.TCPSite(runner, "0.0.0.0", 3000)
     await site.start()
-    print("🚀 Dev server running at http://localhost:3000")
+    print("🐍🚀 PyPack Dev server running at http://localhost:3000")
 
 
 async def notify_reload() -> None:

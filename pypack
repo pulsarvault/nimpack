@@ -9,17 +9,17 @@ from commands.build import run as build_cmd
 def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="pypack",
-        description="React dev toolkit (esbuild + tailwind + dev server + bundler)",
+        description="React dev toolkit (react + tailwind + dev server + bundler)",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
     # pypack create <reactjs|reactts> <project_name>
-    p_create = sub.add_parser("create", help="Create a new React Project")
+    p_create = sub.add_parser("create", help="Create a new PyPack React Project")
     p_create.add_argument("flavor", choices=["reactjs", "reactts"], help="Template")
     p_create.add_argument("name", help="Folder name to create")
 
     # pypack dev
-    p_dev = sub.add_parser("dev", help="Run dev server with HMR")
+    p_dev = sub.add_parser("dev", help="Run dev server with Hot Module Reload")
 
     # pypack build
     p_build = sub.add_parser("build", help="Build production bundle")

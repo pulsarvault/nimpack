@@ -25,7 +25,7 @@ def run() -> None:
         asyncio.get_event_loop().create_task(notify_reload())
 
     async def _main() -> None:
-        print("🚀 PyPack Dev server + React + Tailwind + Watch")
+        print("🐍🚀 PyPack Dev server + React + Tailwind + Watch")
         async def on_js_rebuild() -> None:
             await notify_reload()
 

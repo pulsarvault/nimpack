@@ -51,7 +51,7 @@ def run(entry: str, dist: str, *, minify: bool = False, sourcemap: bool = True) 
     full = [*cmd, *args]
     print("⚡ PyPack build:", " ".join(str(x) for x in full))
     subprocess.run(full, check=True)
-    print("✔ PyPack build bundled →", out)
+    print("✔ 🐍🚀 PyPack build bundled →", out)
 
 
 async def watch(entry: str, dist: str, on_rebuild) -> None:
@@ -79,7 +79,7 @@ async def watch(entry: str, dist: str, on_rebuild) -> None:
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.STDOUT,
     )
-    print("👀 PyPack Watch started")
+    print("🐍🚀 PyPack Watch started")
     first_built_sent = False
 
     assert proc.stdout is not None

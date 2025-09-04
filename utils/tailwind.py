@@ -18,7 +18,7 @@ async def watch_css(project: str) -> None:
     out_css.parent.mkdir(parents=True, exist_ok=True)
 
     cmd = ["npx", "@tailwindcss/cli", "-i", str(src_css), "-o", str(out_css), "--watch"]
-    print("🎨 PyPack Tailwind watch:", " ".join(cmd))
+    print("🐍🚀 PyPack Tailwind watch:", " ".join(cmd))
     proc = await asyncio.create_subprocess_exec(*cmd, cwd=project)
 
     last_mtime = out_css.stat().st_mtime if out_css.exists() else 0.0
@@ -29,7 +29,7 @@ async def watch_css(project: str) -> None:
                 mtime = out_css.stat().st_mtime
                 if mtime != last_mtime:
                     last_mtime = mtime
-                    print("🎨 PyPack Tailwind rebuilt → dist/styles.css (css hot-swap)")
+                    print("🐍🚀 PyPack Tailwind rebuilt → dist/styles.css (css hot-swap)")
                     await notify_css("styles.css")
             if proc.returncode is not None:
                 print("⚠️ PyPack Tailwind CLI exited with code:", proc.returncode)
@@ -45,5 +45,5 @@ def build_css(project: str) -> None:
     src_css, out_css = _paths(project)
     out_css.parent.mkdir(parents=True, exist_ok=True)
     cmd = ["npx", "@tailwindcss/cli", "-i", str(src_css), "-o", str(out_css)]
-    print("🎨 PyPack Tailwind build:", " ".join(cmd))
+    print("🐍🚀 PyPack Tailwind build:", " ".join(cmd))
     subprocess.run(cmd, cwd=project, check=True)
