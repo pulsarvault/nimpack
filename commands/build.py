@@ -1,9 +1,12 @@
 from __future__ import annotations
-import os, shutil, subprocess
+
+import os
+import shutil
 from pathlib import Path
 
-from utils.esbuild import detect_entry, find_esbuild
+from utils.esbuild import detect_entry, run as run_esbuild  # ✅ use wrapper
 from utils.tailwind import build_css
+
 
 def run() -> None:
     project_dir = Path(os.getcwd())
@@ -11,27 +14,17 @@ def run() -> None:
     dist_dir = project_dir / "dist"
     dist_dir.mkdir(parents=True, exist_ok=True)
 
-    out_js = dist_dir / "bundle.js"
-    esb = find_esbuild()
+    # JS (production)
+    run_esbuild(entry, str(dist_dir), minify=True, sourcemap=False)
 
-    # production JS bundle
-    cmd = [esb, entry, "--bundle", "--minify", f"--outfile={out_js}"]
-    print("⚡ Running:", " ".join(cmd))
-    subprocess.run(cmd, check=True)
-    print("✔ Production JS →", out_js)
-
-    # production CSS via Tailwind v4 CLI
+    # CSS (production)
     build_css(str(project_dir))
     print("✔ Production CSS →", dist_dir / "styles.css")
 
-    # copy index.html
+    # HTML
     src_html = project_dir / "index.html"
     if src_html.exists():
         shutil.copy2(src_html, dist_dir / "index.html")
         print("✔ Copied index.html → dist/")
     else:
         print("⚠️ index.html not found at project root")
-
-
-if __name__ == "__main__":
-    run()

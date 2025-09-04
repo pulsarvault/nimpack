@@ -8,11 +8,26 @@
   <body>
     <div id="root"></div>
     <script type="module" src="./bundle.js"></script>
-    <script>
-      const ev = new EventSource("/livereload");
-      ev.onmessage = (e) => {
-        if (e.data.trim() === "reload") location.reload();
-      };
-    </script>
+<script>
+  const es = new EventSource('/livereload');
+
+  // Full reload for JS
+  es.addEventListener('reload', () => location.reload());
+  es.onmessage = (e) => { if (e.data === 'reload') location.reload(); };
+
+  // CSS hot-swap (no flash)
+  es.addEventListener('css', () => {
+    const href = '/styles.css';
+    const link = [...document.querySelectorAll('link[rel="stylesheet"]')]
+      .find(l => (l.getAttribute('href') || '').startsWith(href));
+    if (!link) return;
+    const next = link.cloneNode();
+    next.href = href + '?v=' + Date.now();
+    next.onload = () => link.remove();
+    link.after(next);
+  });
+</script>
+
+
   </body>
 </html>

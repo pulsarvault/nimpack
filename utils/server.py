@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 import asyncio
 from aiohttp import web
 
@@ -46,17 +45,10 @@ async def handle_reload(request: web.Request) -> web.StreamResponse:
 
 async def start(dist: str) -> None:
     app = web.Application()
-
-    # HTML + livereload endpoints
     app.router.add_get("/", handle_root)
     app.router.add_get("/livereload", handle_reload)
-
-    # Serve the common assets at root
     app.router.add_get("/bundle.js", handle_assets)
-    app.router.add_get("/styles.css", handle_assets)  # ✅ add CSS route
-
-    # (Optional but handy) serve everything under /dist/*
-    # Lets you reference images/fonts as /dist/whatever.png
+    app.router.add_get("/styles.css", handle_assets)
     app.router.add_static("/dist/", path=dist, show_index=False)
 
     runner = web.AppRunner(app)
@@ -64,12 +56,21 @@ async def start(dist: str) -> None:
     site = web.TCPSite(runner, "0.0.0.0", 3000)
     await site.start()
     print("🚀 Dev server running at http://localhost:3000")
-    print("   Static files available at /styles.css, /bundle.js, and /dist/*")
 
 
 async def notify_reload() -> None:
     for resp in list(clients):
         try:
+            # named event + generic message (supports both client styles)
+            await resp.write(b"event: reload\ndata: ok\n\n")
             await resp.write(b"data: reload\n\n")
+        except Exception:
+            pass
+
+
+async def notify_css(name: str = "styles.css") -> None:
+    for resp in list(clients):
+        try:
+            await resp.write(f"event: css\ndata: {name}\n\n".encode())
         except Exception:
             pass

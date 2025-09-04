@@ -20,14 +20,14 @@ Supports **JavaScript and TypeScript projects with Tailwind support**, **fast-se
 pip install --user aiohttp watchfiles
 
 # 2. Create a new project (Tailwind support by default)
-./pypack create reactjs my-app (javascript)
+./pypack create reactjs test-app (javascript)
 
 or 
 
-./pypack create reactts my-app (typescript)
+./pypack create reactts test-app (typescript)
 
 # 3. Enter the project
-cd my-app
+cd test-app
 
 # 4. Start the dev server
 ../pypack dev

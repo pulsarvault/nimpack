@@ -1,12 +1,9 @@
 from __future__ import annotations
-import asyncio, os, subprocess
+import asyncio
+import subprocess
 from pathlib import Path
 from typing import Tuple
-
-from utils.server import notify_reload
-
-def _cli() -> list[str]:
-    return ["npx", "@tailwindcss/cli"]
+from utils.server import notify_css
 
 
 def _paths(project: str) -> Tuple[Path, Path]:
@@ -20,23 +17,22 @@ async def watch_css(project: str) -> None:
     src_css, out_css = _paths(project)
     out_css.parent.mkdir(parents=True, exist_ok=True)
 
-    cmd = [*_cli(), "-i", str(src_css), "-o", str(out_css), "--watch"]
-    print("🎨 Tailwind watch:", " ".join(cmd))
-
+    cmd = ["npx", "@tailwindcss/cli", "-i", str(src_css), "-o", str(out_css), "--watch"]
+    print("🎨 PyPack Tailwind watch:", " ".join(cmd))
     proc = await asyncio.create_subprocess_exec(*cmd, cwd=project)
 
     last_mtime = out_css.stat().st_mtime if out_css.exists() else 0.0
     try:
         while True:
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.2)
             if out_css.exists():
                 mtime = out_css.stat().st_mtime
                 if mtime != last_mtime:
                     last_mtime = mtime
-                    print("🎨 Tailwind rebuilt → dist/styles.css (reload)")
-                    await notify_reload()
+                    print("🎨 PyPack Tailwind rebuilt → dist/styles.css (css hot-swap)")
+                    await notify_css("styles.css")
             if proc.returncode is not None:
-                print("⚠️ Tailwind CLI exited with code:", proc.returncode)
+                print("⚠️ PyPack Tailwind CLI exited with code:", proc.returncode)
                 break
     except asyncio.CancelledError:
         try:
@@ -48,6 +44,6 @@ async def watch_css(project: str) -> None:
 def build_css(project: str) -> None:
     src_css, out_css = _paths(project)
     out_css.parent.mkdir(parents=True, exist_ok=True)
-    cmd = [*_cli(), "-i", str(src_css), "-o", str(out_css)]
-    print("🎨 Tailwind build:", " ".join(cmd))
+    cmd = ["npx", "@tailwindcss/cli", "-i", str(src_css), "-o", str(out_css)]
+    print("🎨 PyPack Tailwind build:", " ".join(cmd))
     subprocess.run(cmd, cwd=project, check=True)
