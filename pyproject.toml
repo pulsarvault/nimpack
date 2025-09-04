@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pypack"
-version = "1.0.0"
-description = "React + Tailwind dev tool with live reload and production bundling (esbuild)"
+name = "pypackx"
+version = "1.0.1"
+description = "React + Tailwind Dev-Server, Hot-live-Reloader and Production-Bundler (Rohit c.)"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.9"

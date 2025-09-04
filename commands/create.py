@@ -41,5 +41,5 @@ def run(flavor: str, name: str) -> None:
 
     print("🐍🚀 PyPack: Next steps")
     print(f"    cd {dest.name}")
-    print("    pypack dev (or ../pypack dev) # 🐍🚀 Start the PyPack Dev Server")
+    print("    pypack dev # 🐍🚀 Start the PyPack Dev Server")
 
