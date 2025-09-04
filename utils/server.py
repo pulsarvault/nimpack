@@ -1,24 +1,30 @@
-from aiohttp import web
+from __future__ import annotations
+
 import asyncio
+from aiohttp import web
 
-clients = set()
+clients: set[web.StreamResponse] = set()
 
-async def handle_root(request):
+
+async def handle_root(request: web.Request) -> web.StreamResponse:
     return web.FileResponse("index.html")
 
-async def handle_assets(request):
+
+async def handle_assets(request: web.Request) -> web.StreamResponse:
+    # Serves /bundle.js and /styles.css from ./dist/
     path = "dist" + request.path
     return web.FileResponse(path)
 
-async def handle_reload(request):
+
+async def handle_reload(request: web.Request) -> web.StreamResponse:
     resp = web.StreamResponse(
         status=200,
         reason="OK",
         headers={
             "Content-Type": "text/event-stream",
             "Cache-Control": "no-cache",
-            "Connection": "keep-alive"
-        }
+            "Connection": "keep-alive",
+        },
     )
     await resp.prepare(request)
     clients.add(resp)
@@ -38,21 +44,32 @@ async def handle_reload(request):
     return resp
 
 
-async def start(dist):
+async def start(dist: str) -> None:
     app = web.Application()
+
+    # HTML + livereload endpoints
     app.router.add_get("/", handle_root)
-    app.router.add_get("/bundle.js", handle_assets)
     app.router.add_get("/livereload", handle_reload)
+
+    # Serve the common assets at root
+    app.router.add_get("/bundle.js", handle_assets)
+    app.router.add_get("/styles.css", handle_assets)  # ✅ add CSS route
+
+    # (Optional but handy) serve everything under /dist/*
+    # Lets you reference images/fonts as /dist/whatever.png
+    app.router.add_static("/dist/", path=dist, show_index=False)
 
     runner = web.AppRunner(app)
     await runner.setup()
     site = web.TCPSite(runner, "0.0.0.0", 3000)
     await site.start()
     print("🚀 Dev server running at http://localhost:3000")
+    print("   Static files available at /styles.css, /bundle.js, and /dist/*")
 
-async def notify_reload():
+
+async def notify_reload() -> None:
     for resp in list(clients):
         try:
             await resp.write(b"data: reload\n\n")
-        except:
+        except Exception:
             pass

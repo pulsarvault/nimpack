@@ -1,22 +1,31 @@
-import os, subprocess, shutil
+from __future__ import annotations
 
-def run(entry: str, dist: str):
-    out = os.path.join(dist, "bundle.js")
+import os
+import shutil
+import subprocess
+from pathlib import Path
 
-    # find esbuild
-    root = os.path.dirname(os.path.dirname(__file__))  # go up from utils/
-    esb = os.path.join(root, "bin", "esbuild")
 
-    if not os.path.exists(esb):
-        # fallback: try system-wide esbuild
-        esb = shutil.which("esbuild") or esb
+def find_esbuild() -> str:
+    root = Path(__file__).resolve().parents[1]
+    esb = root / "bin" / "esbuild"
+    if not esb.exists():
+        found = shutil.which("esbuild")
+        return found or str(esb)
+    return str(esb)
 
-    cmd = [
-        esb, entry,
-        "--bundle", "--sourcemap",
-        "--outfile=" + out
-    ]
 
+def detect_entry(project_dir: str) -> str:
+    p = Path(project_dir)
+    tsx = p / "src" / "main.tsx"
+    jsx = p / "src" / "main.jsx"
+    return str(tsx if tsx.exists() else jsx)
+
+
+def run(entry: str, dist: str) -> None:
+    esb = find_esbuild()
+    out = Path(dist) / "bundle.js"
+    cmd = [esb, entry, "--bundle", "--sourcemap", f"--outfile={out}"]
     print("⚡ Esbuild:", " ".join(cmd))
     subprocess.run(cmd, check=True)
     print("✔ Esbuild bundled →", out)

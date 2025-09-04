@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+/* Tell Tailwind where to look for class names */
+@source "../index.html";
+@source "./**/*.{js,jsx,ts,tsx}";
+
+/* optional custom utilities
+@layer utilities {
+    .debug { outline: 1px dashed red }
+}
+*/
+

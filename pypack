@@ -1,37 +1,62 @@
 #!/usr/bin/env python3
-import sys, os
+from __future__ import annotations
+import argparse, sys
 
-# Make vendored deps importable
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "vendor"))
+from commands.create import run as create_cmd
+from commands.dev import run as dev_cmd
+from commands.build import run as build_cmd
 
-import argparse
-from commands import create, build, dev
+def _parse_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="pypack",
+        description="React dev toolkit (esbuild + tailwind + dev server + bundler)",
+    )
+    sub = parser.add_subparsers(dest="command", required=True)
 
-def main():
-    parser = argparse.ArgumentParser(prog="pypack", description="React project builder")
-    sub = parser.add_subparsers(dest="command")
+    # pypack create <reactjs|reactts> <project_name>
+    p_create = sub.add_parser("create", help="Create a new React Project")
+    p_create.add_argument("flavor", choices=["reactjs", "reactts"], help="Template")
+    p_create.add_argument("name", help="Folder name to create")
 
-    # create
-    p_create = sub.add_parser("create", help="Create a new React project")
-    p_create.add_argument("name", help="Project name")
-    p_create.add_argument("--template", choices=["js", "ts"], default="js")
+    # pypack dev
+    p_dev = sub.add_parser("dev", help="Run dev server with HMR")
 
-    # build
-    sub.add_parser("build", help="Build for production")
+    # pypack build
+    p_build = sub.add_parser("build", help="Build production bundle")
 
-    # dev
-    sub.add_parser("dev", help="Run dev server with hot reload")
+    # optional: pypack version
+    p_ver = sub.add_parser("version", help="Show version")
 
-    args = parser.parse_args()
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = _parse_args(argv or sys.argv[1:])
 
     if args.command == "create":
-        create.run(args.name, args.template)
-    elif args.command == "build":
-        build.run()
-    elif args.command == "dev":
-        dev.run()
-    else:
-        parser.print_help()
+        create_cmd(args.flavor, args.name)
+        return 0
+
+    if args.command == "dev":
+        dev_cmd()
+        return 0
+
+    if args.command == "build":
+        build_cmd()
+        return 0
+
+    if args.command == "version":
+        # adjust if you keep version somewhere else
+        from importlib.metadata import version, PackageNotFoundError
+        try:
+            print(version("pypack"))
+        except PackageNotFoundError:
+            print("0.0.0")
+        return 0
+
+    print("Unknown command")
+    return 2
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -1,0 +1,9 @@
+[project]
+name = "pypack"
+version = "0.1.0"
+description = "React dev toolkit (esbuild + tailwind + dev server + bundler)"
+readme = "README.md"
+requires-python = ">=3.9"
+
+[project.scripts]
+pypack = "commands.cli:main"

@@ -1,31 +1,37 @@
-import os, subprocess, shutil
+from __future__ import annotations
+import os, shutil, subprocess
+from pathlib import Path
 
-def run():
-    projectDir = os.getcwd()
-    entry = os.path.join(projectDir, "src", "main.jsx")
-    distDir = os.path.join(projectDir, "dist")
+from utils.esbuild import detect_entry, find_esbuild
+from utils.tailwind import build_css
 
-    os.makedirs(distDir, exist_ok=True)
-    out = os.path.join(distDir, "bundle.js")
+def run() -> None:
+    project_dir = Path(os.getcwd())
+    entry = detect_entry(str(project_dir))
+    dist_dir = project_dir / "dist"
+    dist_dir.mkdir(parents=True, exist_ok=True)
 
-    # Locate esbuild in repo root
-    root = os.path.dirname(os.path.dirname(__file__))  # go up from commands/
-    esb = os.path.join(root, "bin", "esbuild")
-    if not os.path.exists(esb):
-        esb = shutil.which("esbuild") or esb
+    out_js = dist_dir / "bundle.js"
+    esb = find_esbuild()
 
-    cmd = [
-        esb, entry,
-        "--bundle", "--minify",
-        "--outfile=" + out
-    ]
-
+    # production JS bundle
+    cmd = [esb, entry, "--bundle", "--minify", f"--outfile={out_js}"]
     print("⚡ Running:", " ".join(cmd))
     subprocess.run(cmd, check=True)
-    print("✔ Production build →", out)
+    print("✔ Production JS →", out_js)
 
-    # Copy index.html into dist
-    srcHtml = os.path.join(projectDir, "index.html")
-    if os.path.exists(srcHtml):
-        shutil.copy2(srcHtml, os.path.join(distDir, "index.html"))
+    # production CSS via Tailwind v4 CLI
+    build_css(str(project_dir))
+    print("✔ Production CSS →", dist_dir / "styles.css")
+
+    # copy index.html
+    src_html = project_dir / "index.html"
+    if src_html.exists():
+        shutil.copy2(src_html, dist_dir / "index.html")
         print("✔ Copied index.html → dist/")
+    else:
+        print("⚠️ index.html not found at project root")
+
+
+if __name__ == "__main__":
+    run()
