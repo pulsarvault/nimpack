@@ -1,5 +1,7 @@
 # 🐍🔥 PyPack (Rohit Chauhan)
 
+https://pypi.org/project/pypackx/
+
 A React + Tailwind Project Generator, Dev Server, and Web Bundler written in modern Python.  
 Supports **JavaScript and TypeScript projects with Tailwind support**, **fast-server**, **hot-reload**, **web-bundler**.  
 
