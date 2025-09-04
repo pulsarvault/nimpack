@@ -1,7 +1,7 @@
 # 🐍🔥 PyPack (Rohit Chauhan)
 
 A React + Tailwind Project Generator, Dev Server, and Web Bundler written in modern Python.  
-Supports **JavaScript and TypeScript projects with Tailwind support** with **fast-server**, **hot-reload**, **web-bundler**.  
+Supports **JavaScript and TypeScript projects with Tailwind support**, **fast-server**, **hot-reload**, **web-bundler**.  
 
 ## 🚀 Features
 - `create` → create a new React app  
