@@ -1,7 +1,7 @@
 # 🐍🔥 PyPack (Rohit Chauhan)
 
-A lightweight React Project Generator, Dev Server, and Web Bundler written in modern Python.  
-Supports **JavaScript and TypeScript projects** with **fast-server**, **hot-reload**, **web-bundler**.  
+A React + Tailwind Project Generator, Dev Server, and Web Bundler written in modern Python.  
+Supports **JavaScript and TypeScript projects with Tailwind support** with **fast-server**, **hot-reload**, **web-bundler**.  
 
 ## 🚀 Features
 - `create` → create a new React app  
@@ -19,7 +19,7 @@ Supports **JavaScript and TypeScript projects** with **fast-server**, **hot-relo
 # 1. Install Python dependencies
 pip install --user aiohttp watchfiles
 
-# 2. Create a new project
+# 2. Create a new project (Tailwind support by default)
 ./pypack create reactjs my-app (javascript)
 
 or 
