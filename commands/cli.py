@@ -7,15 +7,15 @@ from commands import build as build_cmd
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(prog="pypack")
+    parser = argparse.ArgumentParser(prog="pypack", usage="pypack {create reactjs <my-app> | create reactts <my-app> | dev | build}")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    pc = sub.add_parser("create", help="Create a new PyPack React Project")
+    pc = sub.add_parser("create", help="🐍🚀 pypack create reactjs <my-app> or pypack create reactts <myapp>")
     pc.add_argument("flavor", choices=["reactjs", "reactts"])
     pc.add_argument("name")
 
-    sub.add_parser("dev", help="Run PyPack dev server")
-    sub.add_parser("build", help="Build production bundle")
+    sub.add_parser("dev", help="🐍🚀 Run PyPack Dev Server")
+    sub.add_parser("build", help="🐍🚀 Build Production Bundle")
 
     args = parser.parse_args(argv or sys.argv[1:])
 

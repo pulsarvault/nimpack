@@ -5,27 +5,23 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pypack"
 version = "1.0.0"
-author = "Rohit Chauhan"
-description = "🐍🚀 React + Tailwind dev-tool with live-reload and production-bundling"
+description = "React + Tailwind dev tool with live reload and production bundling (esbuild)"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.9"
+authors = [{ name = "Rohit Chauhan" }]
 dependencies = [
     "aiohttp>=3.9",
     "watchfiles>=0.21",
 ]
-keywords = ["react", "tailwind", "esbuild", "dev-server", "scaffold"]
-
-[project.urls]
-Homepage = "https://github.com/pulsarvault/pypack"
-Issues = "https://github.com/pulsarvault/pypack/issues"
 
 [project.scripts]
 pypack = "commands.cli:main"
 
-[tool.setuptools]
-packages = ["commands", "utils"]   # consider namespacing as noted
-include-package-data = true
+# Let setuptools find your packages (commands/, utils/)
+[tool.setuptools.packages.find]
+include = ["commands", "utils"]
 
+# Include templates in the wheel
 [tool.setuptools.package-data]
-"commands" = ["_templates/**"]
+commands = ["_templates/**"]
